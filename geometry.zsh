@@ -174,6 +174,14 @@ prompt_geometry_git_info() {
   fi
 }
 
+prompt_geometry_pyenv_version() {
+  if which pyenv > /dev/null; then
+    local global=$(cat ~/.pyenv/version)
+    local current=$(pyenv version-name)
+    [ "$global" != "$current" ] && echo "[$current]"
+  fi
+}
+
 prompt_geometry_hash_color() {
   colors=(2 3 4 6 9 12 14)
 
@@ -211,7 +219,7 @@ prompt_geometry_render() {
  %(?.$GEOMETRY_PROMPT.$GEOMETRY_EXIT_VALUE) %F{$GEOMETRY_COLOR_DIR}%3~%f "
 
   PROMPT2=" $GEOMETRY_SYMBOL_RPROMPT "
-  RPROMPT="$(prompt_geometry_git_info)%{$reset_color%}"
+  RPROMPT="$(prompt_geometry_git_info) $(prompt_geometry_pyenv_version)%{$reset_color%}"
 }
 
 prompt_geometry_setup() {
