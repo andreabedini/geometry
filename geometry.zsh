@@ -51,7 +51,7 @@ PROMPT_GEOMETRY_COLORIZE_SYMBOL=${PROMPT_GEOMETRY_COLORIZE_SYMBOL:-false}
 PROMPT_GEOMETRY_COLORIZE_ROOT=${PROMPT_GEOMETRY_COLORIZE_ROOT:-false}
 
 # Use ag if possible
-GREP=$(which ag &> /dev/null && echo "ag" || echo "grep")
+GREP=$(command -v ag >/dev/null 2>&1 && echo "ag" || echo "grep")
 
 prompt_geometry_git_time_since_commit() {
   if [[ $(git log -1 2>&1 > /dev/null | grep -c "^fatal: bad default revision") == 0 ]]; then
@@ -162,7 +162,7 @@ prompt_geometry_git_conflicts() {
 
 prompt_geometry_git_info() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    if $PROMPT_GEOMETRY_GIT_CONFLICTS; then
+    if $PROMPT_GEOMETRY_GIT_CONFLICTS ; then
       conflicts="$(prompt_geometry_git_conflicts) "
     fi
 
@@ -216,10 +216,10 @@ prompt_geometry_set_title() {
 
 prompt_geometry_render() {
   PROMPT="
- %(?.$GEOMETRY_PROMPT.$GEOMETRY_EXIT_VALUE) %F{$GEOMETRY_COLOR_DIR}%3~%f "
+ %1{%(?.$GEOMETRY_PROMPT.$GEOMETRY_EXIT_VALUE)%} %F{$GEOMETRY_COLOR_DIR}%3~%f "
 
   PROMPT2=" $GEOMETRY_SYMBOL_RPROMPT "
-  RPROMPT="$(prompt_geometry_git_info) $(prompt_geometry_pyenv_version)%{$reset_color%}"
+  RPROMPT="$(prompt_geometry_git_info) $(prompt_geometry_pyenv_version)%f"
 }
 
 prompt_geometry_setup() {
